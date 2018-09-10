@@ -15,6 +15,10 @@
 function princetonvidcom_scripts()
 {
   global $post;
+
+  wp_register_style('puvidcom-css', plugins_url('css/style.css',__FILE__ ));
+  wp_enqueue_style('puvidcom-css');
+
   wp_register_script('puvidcom', plugins_url('/js/princetonvidcom.js', __FILE__), array('jquery'),'1.1', true);
   wp_enqueue_script('puvidcom');
   $d = array('post_id'=> $post->ID, 'plugin_url' => plugin_dir_url( __FILE__ ));
@@ -46,6 +50,25 @@ function process_post() {
 
         die(json_encode($annotationObj));
      }
+
+     if( isset( $_POST['action'] )  && $_POST['action'] == 'tagvideo' ) {
+	$user = wp_get_current_user();
+	$annotationObj = new StdClass();
+	$annotationObj->username = $user->user_login;
+	$annotationObj->userid = $user->ID;
+	$rand = mt_rand(100000,999999);
+	$annotationObj->id = $rand;
+	$annotationObj->date = date('m/d/Y h:i:s a', time());
+	$annotationObj->start = $_POST['start'];
+	$annotationObj->text = $_POST['annotation'];
+	add_post_meta($_POST['postid'], 'tag', json_encode($annotationObj), false);
+
+        die(json_encode($annotationObj));
+     }
+
+
+
+
 }
 
 /**************** JSON ***************/
@@ -53,15 +76,27 @@ add_action( 'init', 'princetonvidcom_json' );
 
 function princetonvidcom_json() {
      if( isset( $_GET['a'] )  && $_GET['a'] == 'json' ) {
+	
 	$postid = $_GET['post'];
-	$annotations = get_post_meta($postid, 'annotation');
+	$returnObj = new StdClass();
 	$result = array();
+	$annotations = get_post_meta($postid, 'annotation');
 	foreach($annotations as $annotation) {
 	  $obj = json_decode($annotation);
 	  $result[] = $obj;
 	}
+	$returnObj->annotations = $result;
+
+	$result = array();
+	$tags = get_post_meta($postid, 'tag');
+	foreach($tags as $tag) {
+	  $obj = json_decode($tag);
+	  $result[] = $obj;
+	}
+	$returnObj->tags = $result;
+
 	header('Content-Type: application/json');
-        die(json_encode($result));
+        die(json_encode($returnObj));
      }
 }
 

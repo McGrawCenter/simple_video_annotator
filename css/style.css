@@ -1,0 +1,19 @@
+
+.annotation-list-item {
+  background:white;
+  border:solid 1px #DDD;
+  margin:5px 0px;
+  padding:10px;
+  border-radius:10px;
+}
+.annotation-list-item-meta { font-size:0.7em; font-weight:bold; }
+.annotation-list-item-body { font-size:0.8em; }
+.annotation-list-item-playbutton {
+  float:right;
+  margin:0px 10px 5px 10;
+  height:1.6em;
+}
+.timeline {
+  background:black;
+}
+#puvidcom-timeline { height:18px; }
