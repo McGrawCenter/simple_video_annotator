@@ -24,8 +24,7 @@ var videos = $('video').mediaelementplayer({
 
 		  jQuery.each(data, function(i, v){
 		    var anno = decodeURIComponent(v.text);
-
-		    var html = "<div style='background:white;border:solid 1px grey;margin:10px 0px;padding:10px;border-radius:10px;'>\n";
+		    var html = "<div style='background:white;border:solid 1px grey;margin:5px 0px;padding:10px;border-radius:10px;'>\n";
 		    var html = html + "  <div style='font-size:0.8em;'>"+v.username+" "+v.date+"</div>\n";
 		    var html = html + "  <div><a href='#' class='seek' rel='"+v.start+"'><img src='"+vars.plugin_url+"images/play-button.png' style='float:left;margin:0px 10px 10px 0;'/></a> "
 		    var html = html + anno;
@@ -50,10 +49,12 @@ var videos = $('video').mediaelementplayer({
 	// insert timeline and update with markers
 	function updateTimeline() {
 	   for(var x=0;x<=markers.length-1;x++) {
-	     jQuery("#puvidcom-timeline").append("<span style='position:absolute;left:"+markers[x].pct+"%;'><a href='#' class='seek' rel='"+markers[x].start+"'><span style='font-size:20px;' class='dashicons dashicons-arrow-down'></span></a></span>");
+	     jQuery("#puvidcom-timeline").append("<span style='position:absolute;left:"+markers[x].pct+"%;'><a href='#' class='seek' rel='"+markers[x].start+"'><span style='font-size:20px;color:white;' class='dashicons dashicons-arrow-down'></span></a></span>");
 	   }
 	}
-	jQuery(".mejs-video").after('<div id="annotation-list" style="background:black"></div>');
+
+
+	jQuery(".mejs-video").after('<div id="annotation-list" style=""></div>');
 	updateAnnotationList();
 	
 
@@ -61,7 +62,7 @@ var videos = $('video').mediaelementplayer({
 	function toolbar() {
 	 var h = "<div id='puvidcom-toolbar' style='margin-top:10px;'>";
 	 h += "  <div id='puvidcom-toolbar-form'>";
-	 h += "  <input id='puvidcom-toolbar-start' type='text' name='start' style='' />";
+	 h += "  <input id='puvidcom-toolbar-start' type='text' name='start' style='display:none;' />";
 	 h += "  <textarea id='puvidcom-toolbar-text'></textarea>";
 	 h += "  <p style='margin-top:5px;'><button id='puvidcom-toolbar-add'>Annotate</button> <button>Um..</button> <button>Like..</button></p>";
 	 h += "  </div>";
@@ -104,6 +105,8 @@ var videos = $('video').mediaelementplayer({
 	      var payload = {'action':'annotatevideo','postid':postid,'start':start,'annotation':encodeURIComponent(text)};
 	      jQuery.post( "index.php", payload, function( data ) { updateAnnotationList();updateTimeline(); });
 	    }
+	    jQuery("#puvidcom-toolbar-start").val("");
+	    jQuery("#puvidcom-toolbar-text").val("");
 	});
 
       /** If user clicks in the annotation textarea, pause the video and set the timecode **/

@@ -1,6 +1,6 @@
 <?php 
     /*
-    Plugin Name: Video Commenter
+    Plugin Name: PU Simple Video Annotator
     Plugin URI: http://www.princeton.edu
     Description: Plugin for commenting on video embedded in Wordpress
     Author: Ben Johnston - benj@princeton.edu
